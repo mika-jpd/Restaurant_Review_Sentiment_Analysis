@@ -27,7 +27,7 @@ Place all files in single folder or project folder.
 ## Run Code
 
 Add main method: 
-
+```
 $    if __name__ == '__main__':
          fit(X, y, attributes)
          save_parameters(attributes)
@@ -38,3 +38,4 @@ $        count_pos = numpy.array(pandas.read_csv("positive_feature_likelihoods.t
 
 
  $       label_pred = prediction(xval, attributes['Class prior'], 1 - attributes['Class prior'], count_pos, count_neg)
+ ```
