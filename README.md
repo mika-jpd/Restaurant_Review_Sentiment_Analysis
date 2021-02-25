@@ -28,14 +28,16 @@ Place all files in single folder or project folder.
 
 Add main method: 
 ```
-$    if __name__ == '__main__':
-         fit(X, y, attributes)
-         save_parameters(attributes)
-         numpy.seterr(divide='ignore')
+    if __name__ == '__main__':
+        "fit(X, y, attributes)"
+        "save_parameters(attributes)"
+        numpy.seterr(divide='ignore')
 
-$        count_pos = numpy.array(pandas.read_csv("positive_feature_likelihoods.tsv", header=None, delimiter="\t"))
-         count_neg = numpy.array(pandas.read_csv("negative_feature_likelihoods.tsv", header=None, delimiter="\t"))
+        count_pos = numpy.array(pandas.read_csv("positive_feature_likelihoods.tsv", header=None, delimiter="\t"))
+        count_neg = numpy.array(pandas.read_csv("negative_feature_likelihoods.tsv", header=None, delimiter="\t"))
 
 
- $       label_pred = prediction(xval, attributes['Class prior'], 1 - attributes['Class prior'], count_pos, count_neg)
+        label_pred = prediction(xval, attributes['Class prior'], 1 - attributes['Class prior'], count_pos, count_neg)
+        for i in range(0, 50):
+            print(label_pred[i])
  ```
