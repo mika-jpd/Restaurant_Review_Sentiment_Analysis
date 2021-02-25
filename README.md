@@ -4,9 +4,16 @@
 * [Description](#description)
 * [Dataset](#dataset)
 * [Setup](#setup)
+* [Run code](#run-code)
 
 ## Description
 Bernouilli Naive Bayes Machine Learning algorithm to predict whether a review is positive or negative. It correctly predicts the correct label with an accuracy of 84%.
+
+## Technologies
+Project is created with:
+* Python version: 3.9.1
+* NumPy library version : 1.20.0
+* Pandas library version : 1.2.2
 
 ## Dataset
 The dataset has been made such that each feature is a categorical feature (0, 1) representing the presence or absence of words used in restaurant reviews. Common words such as "the", "a" etc... are not categorized.
