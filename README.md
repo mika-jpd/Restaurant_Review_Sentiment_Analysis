@@ -1,5 +1,10 @@
 # Naive Bayes Sentiment Analysis
 
+## Table of Contens
+* [Description](#description)
+* [Dataset](#dataset)
+* [Setup](#setup)
+
 ## Description
 Bernouilli Naive Bayes Machine Learning algorithm to predict whether a review is positive or negative. It correctly predicts the correct label with an accuracy of 84%.
 
