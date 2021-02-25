@@ -13,6 +13,9 @@ Download the .py files, datasets, and different feature files (class priors,posi
 Place all files in
 
 ## Run Code
+
+Add main method: 
+
 $    if __name__ == '__main__':
          fit(X, y, attributes)
          save_parameters(attributes)
