@@ -22,7 +22,7 @@ Each row represents a single point (restaurant review) and each column its featu
 
 ## Setup
 Download the .py files, datasets, and different feature files (class priors,positive_feature_likelihoods and negative_feature_likelihood).
-Place all files in
+Place all files in single folder or project folder.
 
 ## Run Code
 
