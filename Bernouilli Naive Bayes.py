@@ -2,70 +2,61 @@ import numpy
 import pandas
 
 class bernouilli_naive_bayes:
-    attributes = {'Class prior':0, 'Theta_1':[], 'Theta_0':[], 'Results':[]}
 
-    dataset_train = numpy.loadtxt(
-        "train_dataset.tsv",
-        delimiter="\t")
+    def __init__(self, training, validation):
+        self.attributes = {'Class prior':0, 'Theta_1':[], 'Theta_0':[], 'Results':[]}
 
-    dataset_test = numpy.loadtxt(
-        "validation_dataset.tsv",
-        delimiter="\t")
+        self.dataset_train = pandas.read_csv(training, header=None,delimiter="\t")
+        self.dataset_validation = pandas.read_csv(validation, header=None, delimiter="\t")
 
-    X = dataset_train[:, :-1]
-    y = dataset_train[:, -1]
+        self.X = numpy.array(self.dataset_train.iloc[:, :-1])
+        self.y = numpy.array(self.dataset_train.iloc[:, -1])
 
-    val = pandas.read_csv("validation_dataset.tsv", header=None, delimiter="\t")
+        self.xval = numpy.array(self.dataset_validation.iloc[:, :-1])
+        self.yval = numpy.array(self.dataset_validation.iloc[:, -1])
 
-    xval = numpy.array(val.iloc[:, :-1])
-    yval = numpy.array(val.iloc[:, -1])
-
-    def fit(X, y, attributes):
-
+    def fit(self):
+        "Calculate class_prior"
         value = 0
-        for i in y:
+        for i in self.y:
             if (i==1):
                 value += 1
-        value = value/len(y)
-        attributes['Class prior'] = value
+        value = value/len(self.y)
+        self.attributes['Class prior'] = value
 
-        print(attributes['Class prior'])
+        "calculate positive and negative feature likelihoods"
+        theta_j1 = [0]*len(self.X[0])
+        theta_j0 = [0]*len(self.X[0])
 
-        theta_j1 = [0]*len(X[0])
-        theta_j0 = [0]*len(X[0])
-
-        for i in range(0, len(X[0])):
-            for j in range(0, len(X)):
-                if(y[j] == 1):
-                    theta_j1[i] += X[j][i]
-                if(y[j] == 0):
-                    theta_j0[i] += X[j][i]
+        for i in range(0, len(self.X[0])):
+            for j in range(0, len(self.X)):
+                if(self.y[j] == 1):
+                    theta_j1[i] += self.X[j][i]
+                if(self.y[j] == 0):
+                    theta_j0[i] += self.X[j][i]
 
         for i in range(0, len(theta_j1)):
-            theta_j1[i] = theta_j1[i]/(value*len(y))
+            theta_j1[i] = theta_j1[i]/(value*len(self.y))
         for i in range(0, len(theta_j0)):
-            theta_j0[i] = theta_j0[i]/(value*len(y))
+            theta_j0[i] = theta_j0[i]/(value*len(self.y))
 
-        attributes['Theta_1'] = theta_j1
-        attributes['Theta_0'] = theta_j0
+        self.attributes['Theta_1'] = theta_j1
+        self.attributes['Theta_0'] = theta_j0
 
-
-
-
-    def save_parameters(attributes):
+    def save_parameters(self):
         cp = open("class_priors.tsv", "w+")
-        cp.write(str(attributes['Class prior']) + "\n")
-        cp.write(str(1-attributes['Class prior']) + "\n")
+        cp.write(str(self.attributes['Class prior']) + "\n")
+        cp.write(str(1-self.attributes['Class prior']) + "\n")
 
         nf = open("negative_feature_likelihoods.tsv", "w+")
-        for i in attributes['Theta_0']:
+        for i in self.attributes['Theta_0']:
             nf.write(str(i) + "\n")
 
         pf = open("positive_feature_likelihoods.tsv", "w+")
-        for i in attributes['Theta_1']:
+        for i in self.attributes['Theta_1']:
             pf.write(str(i) + "\n")
 
-    def prediction(xtest, prior_prob_pos, prior_prob_neg, count_pos, count_neg):
+    def prediction(self, xtest, prior_prob_pos, prior_prob_neg, count_pos, count_neg):
 
         ypred = numpy.zeros(xtest.shape[0])
         log_likelihood_pos = 0
@@ -75,7 +66,6 @@ class bernouilli_naive_bayes:
 
         log_likelihood_pos = numpy.matmul(xtest, numpy.log(count_pos)) + numpy.matmul((numpy.ones(xtest.shape) - xtest), numpy.log(
             numpy.ones(count_pos.shape) - count_pos))
-
         log_likelihood_neg = numpy.matmul(xtest, numpy.log(count_neg)) + numpy.matmul((numpy.ones(xtest.shape) - xtest), numpy.log(
             numpy.ones(count_neg.shape) - count_neg))
 
@@ -93,15 +83,19 @@ class bernouilli_naive_bayes:
                 ypred[i] = 0
 
         return ypred
+    def accuracy(self, pred):
+        return 100*numpy.mean(pred == self.yval)
 
-    if __name__ == '__main__':
-        fit(X, y, attributes)
-        save_parameters(attributes)
+x = bernouilli_naive_bayes("train_dataset.tsv", "validation_dataset.tsv")
+x.fit()
+x.save_parameters()
 
-        count_pos = numpy.array(pandas.read_csv("positive_feature_likelihoods.tsv", header=None, delimiter="\t"))
-        count_neg = numpy.array(pandas.read_csv("negative_feature_likelihoods.tsv", header=None, delimiter="\t"))
+prior_data = numpy.array(pandas.read_csv("class_priors.tsv", header=None, delimiter="\t"))
+prior_prob_pos = prior_data[0][0]
+prior_prob_neg = prior_data[1][0]
 
+count_pos = numpy.array(pandas.read_csv("positive_feature_likelihoods.tsv", header=None, delimiter="\t"))
+count_neg = numpy.array(pandas.read_csv("negative_feature_likelihoods.tsv", header=None, delimiter="\t"))
 
-        label_pred = prediction(xval, attributes['Class prior'], 1 - attributes['Class prior'], count_pos, count_neg)
-        print(label_pred)
-
+ypred = x.prediction(x.xval, prior_prob_pos, prior_prob_neg, count_pos, count_neg)
+print(x.accuracy(ypred))
