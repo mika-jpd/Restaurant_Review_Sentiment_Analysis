@@ -26,19 +26,20 @@ Place all files in single folder or project folder.
 
 ## Run Code
 
-Add main method: 
+Add outside the class: 
 ```
-    if __name__ == '__main__':
-        "fit(X, y, attributes)"
-        "save_parameters(attributes)"
-        numpy.seterr(divide='ignore')
+x = bernouilli_naive_bayes("train_dataset.tsv", "validation_dataset.tsv")
+x.fit()
+x.save_parameters()
 
-        count_pos = numpy.array(pandas.read_csv("positive_feature_likelihoods.tsv", header=None, delimiter="\t"))
-        count_neg = numpy.array(pandas.read_csv("negative_feature_likelihoods.tsv", header=None, delimiter="\t"))
+prior_data = numpy.array(pandas.read_csv("class_priors.tsv", header=None, delimiter="\t"))
+prior_prob_pos = prior_data[0][0]
+prior_prob_neg = prior_data[1][0]
 
+count_pos = numpy.array(pandas.read_csv("positive_feature_likelihoods.tsv", header=None, delimiter="\t"))
+count_neg = numpy.array(pandas.read_csv("negative_feature_likelihoods.tsv", header=None, delimiter="\t"))
 
-        label_pred = prediction(xval, attributes['Class prior'], 1 - attributes['Class prior'], count_pos, count_neg)
-        for i in range(0, 50):
-            print(label_pred[i])
+ypred = x.prediction(x.xval, prior_prob_pos, prior_prob_neg, count_pos, count_neg)
+print(x.accuracy(ypred))
  ```
 Enjoy!
