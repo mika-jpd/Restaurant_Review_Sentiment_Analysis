@@ -18,7 +18,7 @@ Project is created with:
 ## Dataset
 The dataset has been made such that each feature is a categorical feature (0, 1) representing the presence or absence of words used in restaurant reviews. Common words such as "the", "a" etc... are not categorized.
 
-Each row represents a single point (restaurant review) and each column its features (presence or not of words used in reviews). Each column is an individual feature apart from the last column which contains the labels, whether a review is positive (1) or negative (0).
+Each row represents a single point (restaurant review) and each column an individual feature. Since all features are binary features, each point's columns will hold either a 1 (presence of the word represented by the ith feature) or 0 (absence of the word represented by the ith feature).
 
 ## Setup
 Download the .py files, datasets, and different feature files (class priors,positive_feature_likelihoods and negative_feature_likelihood).
