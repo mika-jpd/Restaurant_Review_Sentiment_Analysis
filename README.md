@@ -26,7 +26,7 @@ Place all files in single folder or project folder.
 
 ## Run Code
 
-Add outside the class: 
+I have added the following code outside the class to run the model:
 ```
 x = bernouilli_naive_bayes("train_dataset.tsv", "validation_dataset.tsv")
 x.fit()
