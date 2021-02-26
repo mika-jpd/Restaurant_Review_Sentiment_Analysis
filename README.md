@@ -41,3 +41,4 @@ Add main method:
         for i in range(0, 50):
             print(label_pred[i])
  ```
+Enjoy!
